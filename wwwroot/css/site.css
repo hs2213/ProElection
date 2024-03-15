@@ -1,4 +1,7 @@
-
+h1, h2, h3, h4, h5, p, span, a, li, ol, table, div {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #121212;
+}
 
 #blazor-error-ui {
     background: lightyellow;
