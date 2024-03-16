@@ -1,12 +1,14 @@
-﻿using ProElection.Entities.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using ProElection.Entities.Enums;
 
 namespace ProElection.Entities;
 
 public class Election
 {
     public Guid Id { get; set; }
+    
     public required string Name { get; set; }
-    public DateTimeOffset Start { get; set; }
-    public DateTimeOffset End { get; set; }
-    public Country Country { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; } 
+    public required List<Guid> Candidates { get; set; }
 }

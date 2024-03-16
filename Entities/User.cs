@@ -10,7 +10,7 @@ public class User
     public required string Email { get; set; }
     public required string Address { get; set; }
     public required string Postcode { get; set; }
+    public required string Country { get; set; }
     public required string HashedPassword { get; set; }
-    public Country Country { get; set; }
     public UserType UserType { get; set; }
 }
