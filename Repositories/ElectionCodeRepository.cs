@@ -25,7 +25,7 @@ public class ElectionCodeRepository : IElectionCodeRepository
     /// <inheritdoc/>
     public async Task<ElectionCode?> GetAsync(Guid id)
     {
-        return await _dbContext.ElectionCodes.FirstOrDefaultAsync(storedCode => storedCode.Id == id);
+        return await _dbContext.ElectionCodes.SingleOrDefaultAsync(storedCode => storedCode.Id == id);
     }
     
     /// <inheritdoc/>
