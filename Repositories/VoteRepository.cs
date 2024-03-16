@@ -1,8 +1,9 @@
 ﻿using ProElection.Persistence;
+using ProElection.Repositories.Interfaces;
 
 namespace ProElection.Repositories;
 
-public class VoteRepository
+public class VoteRepository : IVoteRepository
 {
     private readonly ProElectionDbContext _dbContext;
 
