@@ -3,6 +3,9 @@ using ProElection.Entities.Enums;
 
 namespace ProElection.Repositories.Interfaces;
 
+/// <summary>
+/// Repository containing methods for interacting with the users table in the database.
+/// </summary>
 public interface IUserRepository
 {
     /// <summary>

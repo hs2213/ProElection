@@ -6,6 +6,7 @@ using ProElection.Repositories.Interfaces;
 
 namespace ProElection.Repositories;
 
+/// <inheritdoc/>
 public class UserRepository : IUserRepository
 {
     private readonly ProElectionDbContext _dbContext;

@@ -2,6 +2,9 @@
 
 namespace ProElection.Repositories.Interfaces;
 
+/// <summary>
+/// Repository containing methods for interacting with the elections table in the database.
+/// </summary>
 public interface IElectionRepository
 {
     /// <summary>

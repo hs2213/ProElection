@@ -2,13 +2,7 @@
 
 namespace ProElection.Entities;
 
-public class ElectionCode
+public class ElectionCode : UserElectionAssociation
 {
-    public Guid Id { get; set; }
-    
-    public Guid UserId { get; set; }
-    
-    public Guid ElectionId { get; set; }
-    
     public CodeStatus Status { get; set; }
 }
