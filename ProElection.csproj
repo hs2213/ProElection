@@ -11,4 +11,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Repositories\" />
+      <Folder Include="Services\" />
+      <Folder Include="Shared\Components\" />
+    </ItemGroup>
+
 </Project>
