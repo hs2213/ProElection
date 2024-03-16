@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Entities\Validations\" />
       <Folder Include="Repositories\" />
       <Folder Include="Services\" />
       <Folder Include="Shared\Components\" />

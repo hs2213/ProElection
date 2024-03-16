@@ -2,5 +2,8 @@
 
 public class Election
 {
-    
+    public Guid Id { get; set; }
+    public required string Name { get; set; }
+    public DateTimeOffset Start { get; set; }
+    public DateTimeOffset End { get; set; }
 }
