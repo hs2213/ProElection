@@ -2,7 +2,7 @@
 
 namespace ProElection.Entities;
 
-public class InPersonCode
+public class ElectionCode : UserElectionAssociation
 {
     public CodeStatus Status { get; set; }
 }
