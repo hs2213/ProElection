@@ -16,12 +16,11 @@ public interface IUserRepository
     public Task<User?> GetUserByIdAsync(Guid id);
 
     /// <summary>
-    /// Gets a user from the database by its email and hashed password.
+    /// Gets a user from the database by its email.
     /// </summary>
     /// <param name="email"><see cref="string"/> containing the user's email</param>
-    /// <param name="hashedPassword"><see cref="string"/> containing the user's hashed password.</param>
-    /// <returns><see cref="User"/> with the given email and password or null if not found.</returns>
-    public Task<User?> GetUserByEmailAndPassword(string email, string hashedPassword);
+    /// <returns><see cref="User"/> with the given email or null if not found.</returns>
+    public Task<User?> GetUserByEmail(string email);
 
     /// <summary>
     /// Creates a new user in the database.
@@ -35,4 +34,10 @@ public interface IUserRepository
     /// </summary>
     /// <returns>List of candidates in the database.</returns>
     public IEnumerable<User> GetCandidatesAsync();
+
+    /// <summary>
+    /// Checks if an email already exists in the database.
+    /// </summary>
+    /// <param name="email">Email to check</param>
+    public Task<bool> CheckEmailExistsAsync(string email);
 }

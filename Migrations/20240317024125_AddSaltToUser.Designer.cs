@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProElection.Persistence;
 
@@ -10,9 +11,11 @@ using ProElection.Persistence;
 namespace ProElection.Migrations
 {
     [DbContext(typeof(ProElectionDbContext))]
-    partial class ProElectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240317024125_AddSaltToUser")]
+    partial class AddSaltToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");

@@ -23,11 +23,13 @@ public class UserRepository : IUserRepository
     }
     
     /// <inheritdoc/>
-    public async Task<User?> GetUserByEmailAndPassword(string email, string hashedPassword)
+    public async Task<User?> GetUserByEmail(string email)
     {
         return await _dbContext.Users
-            .SingleOrDefaultAsync(user => user.Email == email && user.HashedPassword == hashedPassword);
+            .SingleOrDefaultAsync(user => user.Email == email);
     }
+    
+    
     
     /// <inheritdoc/>
     public async Task<User> CreateUserAsync(User user)
@@ -41,5 +43,10 @@ public class UserRepository : IUserRepository
     public IEnumerable<User> GetCandidatesAsync()
     {
         return _dbContext.Users.Where(user => user.UserType == UserType.Candidate);
+    }
+    
+    public async Task<bool> CheckEmailExistsAsync(string email)
+    {
+        return await _dbContext.Users.AnyAsync(user => user.Email == email);
     }
 }

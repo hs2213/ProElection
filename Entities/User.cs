@@ -12,5 +12,12 @@ public class User
     public required string Postcode { get; set; }
     public required string Country { get; set; }
     public required string HashedPassword { get; set; }
+    
+    /// <summary>
+    /// Each user has a unique salt to hash their password with.
+    /// Used to make rainbow table attacks more difficult.
+    /// </summary>
+    public required string PasswordSalt { get; set; }
+    
     public UserType UserType { get; set; }
 }
