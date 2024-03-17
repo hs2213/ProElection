@@ -16,19 +16,19 @@ public class ElectionRepository : IElectionRepository
     }
     
     /// <inheritdoc/>
-    public async Task<IEnumerable<Election>> GetElectionsAsync()
+    public async Task<IEnumerable<Election>> GetElections()
     {
         return await _dbContext.Elections.ToListAsync();
     }
     
     /// <inheritdoc/>
-    public async Task<Election?> GetElectionByIdAsync(Guid id)
+    public async Task<Election?> GetElectionById(Guid id)
     {
         return await _dbContext.Elections.SingleOrDefaultAsync(election => election.Id == id);
     }
     
     /// <inheritdoc/>
-    public async Task<Election> CreateElectionAsync(Election election)
+    public async Task<Election> CreateElection(Election election)
     {
         await _dbContext.Elections.AddAsync(election);
         await _dbContext.SaveChangesAsync();
@@ -36,7 +36,7 @@ public class ElectionRepository : IElectionRepository
     }
     
     /// <inheritdoc/>
-    public async Task UpdateElectionAsync(Election election)
+    public async Task UpdateElection(Election election)
     {
         _dbContext.Elections.Update(election);
         await _dbContext.SaveChangesAsync();

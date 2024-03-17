@@ -13,7 +13,7 @@ public interface IUserRepository
     /// </summary>
     /// <param name="id"><see cref="Guid"/> Id of user to get.</param>
     /// <returns><see cref="User"/> with the given ID or null if not found.</returns>
-    public Task<User?> GetUserByIdAsync(Guid id);
+    public Task<User?> GetUserById(Guid id);
 
     /// <summary>
     /// Gets a user from the database by its email.
@@ -27,17 +27,17 @@ public interface IUserRepository
     /// </summary>
     /// <param name="user"><see cref="User"/> to add to the database.</param>
     /// <returns><see cref="User"/> added to the database</returns>
-    public Task<User> CreateUserAsync(User user);
+    public Task<User> CreateUser(User user);
 
     /// <summary>
     /// Gets all the users with the type of <see cref="UserType.Candidate"/>
     /// </summary>
     /// <returns>List of candidates in the database.</returns>
-    public IEnumerable<User> GetCandidatesAsync();
+    public IEnumerable<User> GetCandidates();
 
     /// <summary>
     /// Checks if an email already exists in the database.
     /// </summary>
     /// <param name="email">Email to check</param>
-    public Task<bool> CheckEmailExistsAsync(string email);
+    public Task<bool> CheckEmailExists(string email);
 }

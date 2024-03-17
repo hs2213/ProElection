@@ -17,7 +17,7 @@ public class UserRepository : IUserRepository
     }
     
     /// <inheritdoc/>
-    public async Task<User?> GetUserByIdAsync(Guid id)
+    public async Task<User?> GetUserById(Guid id)
     {
         return await _dbContext.Users.SingleOrDefaultAsync(user => user.Id == id);
     }
@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
     
     
     /// <inheritdoc/>
-    public async Task<User> CreateUserAsync(User user)
+    public async Task<User> CreateUser(User user)
     {
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
@@ -40,12 +40,12 @@ public class UserRepository : IUserRepository
     }
     
     /// <inheritdoc/>
-    public IEnumerable<User> GetCandidatesAsync()
+    public IEnumerable<User> GetCandidates()
     {
         return _dbContext.Users.Where(user => user.UserType == UserType.Candidate);
     }
     
-    public async Task<bool> CheckEmailExistsAsync(string email)
+    public async Task<bool> CheckEmailExists(string email)
     {
         return await _dbContext.Users.AnyAsync(user => user.Email == email);
     }

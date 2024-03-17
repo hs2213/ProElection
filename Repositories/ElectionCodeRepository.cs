@@ -16,7 +16,7 @@ public class ElectionCodeRepository : IElectionCodeRepository
     }
     
     /// <inheritdoc/>
-    public async Task<ElectionCode> CreateAsync(ElectionCode electionCode)
+    public async Task<ElectionCode> Create(ElectionCode electionCode)
     {
         await _dbContext.ElectionCodes.AddAsync(electionCode);
         await _dbContext.SaveChangesAsync();
@@ -24,13 +24,13 @@ public class ElectionCodeRepository : IElectionCodeRepository
     }
     
     /// <inheritdoc/>
-    public async Task<ElectionCode?> GetAsync(Guid id)
+    public async Task<ElectionCode?> Get(Guid id)
     {
         return await _dbContext.ElectionCodes.SingleOrDefaultAsync(storedCode => storedCode.Id == id);
     }
     
     /// <inheritdoc/>
-    public async Task UpdateAsync(ElectionCode electionCode)
+    public async Task Update(ElectionCode electionCode)
     {
         _dbContext.ElectionCodes.Update(electionCode);
         await _dbContext.SaveChangesAsync();

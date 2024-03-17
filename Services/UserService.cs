@@ -6,6 +6,7 @@ using ProElection.Services.Interfaces;
 
 namespace ProElection.Services;
 
+/// <inheritdoc/>
 public sealed class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
@@ -16,14 +17,13 @@ public sealed class UserService : IUserService
         _userRepository = userRepository;
     }
     
-    public async Task<User?> GetUserById(Guid id) => await _userRepository.GetUserByIdAsync(id);
+    /// <inheritdoc/>
+    public async Task<User?> GetUserById(Guid id) => await _userRepository.GetUserById(id);
 
-    /// <summary>
-    /// Used to authenticate a user by their email and password.
-    /// </summary>
-    /// <param name="email">input user email</param>
-    /// <param name="password">raw input user password</param>
-    /// <returns>null or <see cref="User"/> if email exists in the db and the password is correct.</returns>
+    /// <inheritdoc/>
+    public IEnumerable<User> GetCandidates() => _userRepository.GetCandidates();
+    
+    /// <inheritdoc/>
     public async Task<User?> Authenticate(string email, string password)
     {
         email = email.ToLower();
@@ -40,12 +40,19 @@ public sealed class UserService : IUserService
         return hashedPassword != user.HashedPassword ? null : user;
     }
     
-    public async Task<User> CreateUser(User user)
+    /// <inheritdoc/>
+    public async Task<User?> CreateUser(User user)
     {
         user.Email = user.Email.ToLower();
         user.PasswordSalt = Guid.NewGuid().ToString();
         user.HashedPassword = GetHashedPassword(user.HashedPassword, user.PasswordSalt);
-        return await _userRepository.CreateUserAsync(user);
+
+        if (await _userRepository.CheckEmailExists(user.Email))
+        {
+            return null;
+        }
+        
+        return await _userRepository.CreateUser(user);
     }
     
     /// <summary>
