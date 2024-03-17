@@ -27,7 +27,7 @@ public interface IUserService
     /// Gets all the users with the type of <see cref="UserType.Candidate"/>
     /// </summary>
     /// <returns>List of <see cref="User"/> of type <see cref="UserType.Candidate"/></returns>
-    public IEnumerable<User> GetCandidates();
+    public Task<IEnumerable<User>> GetCandidates();
 
     /// <summary>
     /// Creates a new user, hashing its password.
@@ -36,4 +36,27 @@ public interface IUserService
     /// <returns>null if the email of the user is not unique or
     /// <see cref="User"/> added to the database</returns>
     public Task<User?> CreateUser(User user);
+
+    /// <summary>
+    /// Gets a list of <see cref="Election"/> the user can vote in.
+    /// </summary>
+    /// <param name="userId"><see cref="Guid"/> containing user ID.</param>
+    /// <returns>List of elections that the user can vote in.</returns>
+    public Task<IEnumerable<Election>?> GetUserElections(Guid userId);
+
+    /// <summary>
+    /// Adds an election to a <see cref="User"/>.
+    /// </summary>
+    /// <param name="user">user to add the election to.</param>
+    /// <param name="electionId">Id of the election to add.</param>
+    /// <returns></returns>
+    public Task AddElectionToUser(User user, Guid electionId);
+
+    /// <summary>
+    /// Removes an election from a <see cref="User"/>.
+    /// </summary>
+    /// <param name="user">user to remove the election from.</param>
+    /// <param name="electionId">Id of the election to remove.</param>
+    /// <returns></returns>
+    public Task RemoveElectionFromUser(User user, Guid electionId);
 }

@@ -29,8 +29,6 @@ public class UserRepository : IUserRepository
             .SingleOrDefaultAsync(user => user.Email == email);
     }
     
-    
-    
     /// <inheritdoc/>
     public async Task<User> CreateUser(User user)
     {
@@ -40,13 +38,21 @@ public class UserRepository : IUserRepository
     }
     
     /// <inheritdoc/>
-    public IEnumerable<User> GetCandidates()
+    public async Task<IEnumerable<User>> GetCandidates()
     {
-        return _dbContext.Users.Where(user => user.UserType == UserType.Candidate);
+        return await _dbContext.Users.Where(user => user.UserType == UserType.Candidate).ToListAsync();
     }
     
+    /// <inheritdoc/>
     public async Task<bool> CheckEmailExists(string email)
     {
         return await _dbContext.Users.AnyAsync(user => user.Email == email);
+    }
+    
+    /// <inheritdoc/>
+    public async Task UpdateUser(User user)
+    {
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
     }
 }

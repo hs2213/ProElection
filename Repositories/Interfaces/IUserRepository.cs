@@ -33,11 +33,18 @@ public interface IUserRepository
     /// Gets all the users with the type of <see cref="UserType.Candidate"/>
     /// </summary>
     /// <returns>List of candidates in the database.</returns>
-    public IEnumerable<User> GetCandidates();
-
+    public Task<IEnumerable<User>> GetCandidates();
+    
     /// <summary>
     /// Checks if an email already exists in the database.
     /// </summary>
     /// <param name="email">Email to check</param>
     public Task<bool> CheckEmailExists(string email);
+
+    /// <summary>
+    /// Updates a user in the database.
+    /// </summary>
+    /// <param name="user"><see cref="User"/> to update.</param>
+    /// <returns></returns>
+    public Task UpdateUser(User user);
 }

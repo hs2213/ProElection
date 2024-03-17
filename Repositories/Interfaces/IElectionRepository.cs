@@ -20,6 +20,13 @@ public interface IElectionRepository
     public Task<Election?> GetElectionById(Guid id);
 
     /// <summary>
+    /// Gets multiple elections by their IDs from the elections table in the database.
+    /// </summary>
+    /// <param name="ids"><see cref="IEnumerable{Guid}"/> of election Ids</param>
+    /// <returns>List of Elections associated with the user</returns>
+    public Task<IEnumerable<Election>> GetMultipleElectionsByIds(IEnumerable<Guid> ids);
+    
+    /// <summary>
     /// Creates an election in the elections table in the database.
     /// </summary>
     /// <param name="election"><see cref="Election"/> to add to the database.</param>

@@ -22,6 +22,14 @@ public interface IElectionCodeRepository
     public Task<ElectionCode?> Get(Guid id);
 
     /// <summary>
+    /// Gets an election code by the election and user id from the Election Code table in the database.
+    /// </summary>
+    /// <param name="electionId">Id of election</param>
+    /// <param name="userId">Id of user</param>
+    /// <returns>null if it doesnt exist or an <see cref="ElectionCode"/></returns>
+    public Task<ElectionCode?> GetByElectionAndUser(Guid electionId, Guid userId);
+
+    /// <summary>
     /// Updates an Election Code in the Election Code table in the database.
     /// </summary>
     /// <param name="electionCode"><see cref="ElectionCode"/> with details to update</param>

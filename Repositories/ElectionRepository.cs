@@ -20,6 +20,11 @@ public class ElectionRepository : IElectionRepository
     {
         return await _dbContext.Elections.ToListAsync();
     }
+
+    public async Task<IEnumerable<Election>> GetMultipleElectionsByIds(IEnumerable<Guid> ids)
+    {
+        return await _dbContext.Elections.Where(election => ids.Contains(election.Id)).ToListAsync();
+    }
     
     /// <inheritdoc/>
     public async Task<Election?> GetElectionById(Guid id)

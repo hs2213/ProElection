@@ -10,18 +10,21 @@ namespace ProElection.Services;
 public sealed class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IElectionService _electionService;
 
     public UserService(
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        IElectionService electionService)
     {
         _userRepository = userRepository;
+        _electionService = electionService;
     }
     
     /// <inheritdoc/>
     public async Task<User?> GetUserById(Guid id) => await _userRepository.GetUserById(id);
 
     /// <inheritdoc/>
-    public IEnumerable<User> GetCandidates() => _userRepository.GetCandidates();
+    public async Task<IEnumerable<User>> GetCandidates() => await _userRepository.GetCandidates();
     
     /// <inheritdoc/>
     public async Task<User?> Authenticate(string email, string password)
@@ -53,6 +56,56 @@ public sealed class UserService : IUserService
         }
         
         return await _userRepository.CreateUser(user);
+    }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<Election>?> GetUserElections(Guid userId)
+    {
+        User? user = await GetUserById(userId);
+
+        if (user == null)
+        {
+            return null;
+        }
+        
+        return await _electionService.GetElectionsByMultipleIds(user.ParticipatingElections);
+    }
+    
+    /// <inheritdoc/>
+    public async Task AddElectionToUser(User user, Guid electionId)
+    {
+        if (user.ParticipatingElections.Contains(electionId))
+        {
+            return;
+        }
+        
+        user.ParticipatingElections.Add(electionId);
+        await _userRepository.UpdateUser(user);
+    }
+    
+    /// <inheritdoc/>
+    public async Task RemoveElectionFromUser(User user, Guid electionId)
+    {
+        if (user.ParticipatingElections.Contains(electionId) == false)
+        {
+            return;
+        }
+        
+        user.ParticipatingElections.Remove(electionId);
+        await _userRepository.UpdateUser(user);
+    }
+    
+    public async Task RemoveElectionFromUser(Guid userId, Guid electionId)
+    {
+        User? user = await GetUserById(userId);
+        
+        if (user == null)
+        {
+            return;
+        }
+        
+        user.ParticipatingElections.Add(electionId);
+        await _userRepository.UpdateUser(user);
     }
     
     /// <summary>
