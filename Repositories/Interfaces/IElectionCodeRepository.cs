@@ -19,7 +19,7 @@ public interface IElectionCodeRepository
     /// </summary>
     /// <param name="id"><see cref="Guid"/> Id of election code to get.</param>
     /// <returns><see cref="ElectionCode"/> with the given id or null if not found.</returns>
-    public Task<ElectionCode?> Get(Guid id);
+    public Task<ElectionCode?> GetById(Guid id);
 
     /// <summary>
     /// Gets an election code by the election and user id from the Election Code table in the database.

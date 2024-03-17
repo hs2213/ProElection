@@ -24,7 +24,7 @@ public class ElectionCodeRepository : IElectionCodeRepository
     }
     
     /// <inheritdoc/>
-    public async Task<ElectionCode?> Get(Guid id)
+    public async Task<ElectionCode?> GetById(Guid id)
     {
         return await _dbContext.ElectionCodes.SingleOrDefaultAsync(storedCode => storedCode.Id == id);
     }

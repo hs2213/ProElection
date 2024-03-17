@@ -35,11 +35,13 @@ public sealed class ElectionService : IElectionService
         return await _electionRepository.GetMultipleElectionsByIds(electionIds);
     }
 
-    public async Task<ElectionCode?> GetElectionCodeById(Guid electionCodeId)
+    /// <inheritdoc/>
+    public async Task<ElectionCode?> GetElectionCode(Guid electionCodeId)
     {
-        return await _electionCodeRepository.Get(electionCodeId);
+        return await _electionCodeRepository.GetById(electionCodeId);
     }
     
+    /// <inheritdoc/>
     public async Task<ElectionCode> GetElectionCode(Guid electionId, Guid userId)
     {
         ElectionCode? electionCode = await _electionCodeRepository.GetByElectionAndUser(electionId, userId);
@@ -58,12 +60,15 @@ public sealed class ElectionService : IElectionService
         
         return await _electionCodeRepository.Create(electionCode);
     }
-    
+
+    /// <inheritdoc/>
     public async Task Vote(Vote vote) => await _voteRepository.Create(vote);
     
+    /// <inheritdoc/>
     public async Task<bool> CheckIfUserVoted(Guid electionId, Guid userId) =>
         await _voteRepository.CheckIfUserVotedInElection(electionId, userId);
 
+    /// <inheritdoc/>
     public async Task<Dictionary<User, int>?> CalculateResults(Guid electionId)
     {
         Election? election = await _electionRepository.GetElectionById(electionId);
