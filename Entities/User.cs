@@ -20,4 +20,6 @@ public class User
     public required string PasswordSalt { get; set; }
     
     public UserType UserType { get; set; }
+    
+    public required List<Guid> ParticipatingElections { get; set; }
 }

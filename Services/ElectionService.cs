@@ -25,5 +25,4 @@ public sealed class ElectionService : IElectionService
         return await _electionRepository.GetElections();
     }
     
-    
 }
