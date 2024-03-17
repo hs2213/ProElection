@@ -11,4 +11,6 @@ public class Election
     public DateTime Start { get; set; }
     public DateTime End { get; set; } 
     public required List<Guid> Candidates { get; set; }
+    
+    public ElectionType ElectionType { get; set; }
 }
