@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ProElection.Persistence;
+using ProElection.Repositories;
+using ProElection.Repositories.Interfaces;
+using ProElection.Services;
+using ProElection.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +13,17 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 builder.Services.AddDbContext<ProElectionDbContext>();
+
+builder.Services
+    .AddScoped<IElectionCodeRepository, ElectionCodeRepository>()
+    .AddScoped<IElectionRepository, ElectionRepository>()
+    .AddScoped<IUserRepository, UserRepository>()
+    .AddScoped<IVoteRepository, VoteRepository>();
+
+builder.Services
+    .AddScoped<IElectionService, ElectionService>()
+    .AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 

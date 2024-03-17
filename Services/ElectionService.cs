@@ -1,6 +1,8 @@
-﻿namespace ProElection.Services;
+﻿using ProElection.Services.Interfaces;
 
-public class ElectionService
+namespace ProElection.Services;
+
+public sealed class ElectionService : IElectionService
 {
     
 }
