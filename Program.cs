@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using FluentValidation;
+using ProElection.Entities;
+using ProElection.Entities.Validations;
 using ProElection.Persistence;
 using ProElection.Repositories;
 using ProElection.Repositories.Interfaces;
@@ -24,6 +25,10 @@ builder.Services
     .AddScoped<IElectionService, ElectionService>()
     .AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IValidator<Election>, ElectionValidator>();
+builder.Services.AddScoped<IValidator<ElectionCode>, ElectionCodeValidator>();
+builder.Services.AddScoped<IValidator<User>, UserValidator>();
+builder.Services.AddScoped<IValidator<Vote>, VoteValidator>();
 
 var app = builder.Build();
 
