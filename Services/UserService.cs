@@ -40,16 +40,23 @@ public sealed class UserService : IUserService
         return hashedPassword != user.HashedPassword ? null : user;
     }
     
+    public async Task<User> CreateUser(User user)
+    {
+        user.Email = user.Email.ToLower();
+        user.PasswordSalt = Guid.NewGuid().ToString();
+        user.HashedPassword = GetHashedPassword(user.HashedPassword, user.PasswordSalt);
+        return await _userRepository.CreateUserAsync(user);
+    }
+    
     /// <summary>
     /// Gets a hashed password from a plain text password and a salt.
     /// </summary>
     /// <param name="password">raw input password.</param>
     /// <param name="salt">randomised salt given to user.</param>
     /// <returns></returns>
-    private string GetHashedPassword(string password, string salt)
+    private static string GetHashedPassword(string password, string salt)
     {
         byte[] hashedPassword = SHA256.HashData(Encoding.UTF8.GetBytes(password + salt));
         return Convert.ToBase64String(hashedPassword);
     }
-
 }
