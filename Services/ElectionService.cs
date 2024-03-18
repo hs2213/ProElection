@@ -9,18 +9,18 @@ public sealed class ElectionService : IElectionService
     private readonly IElectionRepository _electionRepository;
     private readonly IElectionCodeRepository _electionCodeRepository;
     private readonly IVoteRepository _voteRepository;
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
     public ElectionService(
         IElectionRepository electionRepository, 
         IElectionCodeRepository electionCodeRepository, 
         IVoteRepository voteRepository,
-        IUserService userService)
+        IUserRepository userRepository)
     {
         _electionRepository = electionRepository;
         _electionCodeRepository = electionCodeRepository;
         _voteRepository = voteRepository;
-        _userService = userService;
+        _userRepository = userRepository;
     }
     
     /// <inheritdoc/>
@@ -101,7 +101,7 @@ public sealed class ElectionService : IElectionService
         
         foreach (Guid candidateId in election.Candidates)
         {
-            User? candidate = await _userService.GetUserById(candidateId);
+            User? candidate = await _userRepository.GetUserById(candidateId);
 
             if (candidate == null)
             {

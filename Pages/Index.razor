@@ -1,3 +1,18 @@
 ﻿@page "/"
-<PageTitle>Index</PageTitle>
 
+<PageTitle>Login</PageTitle>
+
+
+<div class="middle-container absolute-center box-border">
+    <h1>ProElection</h1>
+    <div class="inline bottom-containers">
+        <button
+            @onclick="@(() => _navigationManager.NavigateTo("sign-in"))">
+            Sign In
+        </button>
+        <button
+            @onclick="@(() => _navigationManager.NavigateTo("election-code"))">
+            Vote In Person
+        </button>
+    </div>
+</div>
