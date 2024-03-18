@@ -1,3 +1,9 @@
-﻿<label>
-    @PropName: <input type="text"/>
-</label>
+﻿@typeparam TEntity
+
+<div class="wrapper">
+  <label class="inline">
+      <span class="label-name space-to-vacate">@LabelName:</span> 
+      <input class="label-input space-to-vacate" type="@(InputType.ToString().ToLower())"/>
+  </label>
+  <p class="error-message">Error Message</p>  
+</div>

@@ -2,13 +2,18 @@ body {
     background-color: #f0f0f0;
 }
 
-h1, h2, h3, h4, h5, p, span, a, li, ol, table, div, button {
+h1, h2, h3, h4, h5, p, span, a, li, ol, table, div, button, input {
     color: #121212;
     box-sizing: border-box;
     font-family: "DM Sans", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     margin: 0;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
 button {
@@ -25,7 +30,7 @@ button:hover {
     color: #f0f0f0;
 }
 
-div {
+div, h1, h2, h3, h4, h5, p, span, a, li, ol {
     outline: none;
     border: none;
 }

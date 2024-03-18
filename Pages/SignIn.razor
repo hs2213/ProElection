@@ -2,10 +2,14 @@
 
 <PageTitle>Sign In</PageTitle>
 
-<div class="box-border absolute-center middle-container stack-align-items">
-    <h1>Sign In</h1>
+<CentredBoxWithTitle Header="Sign In">
     <form>
-        <ValidatedInput></ValidatedInput>
+        <ValidatedInput
+            LabelName="Email"
+            InputType="InputType.Email"/>
+        <ValidatedInput
+                    LabelName="Password"
+                    InputType="InputType.Password"/>
     </form>
-    <button>Sign Up</button>
-</div>
+    <button @onclick="@(() => _navigationManager.NavigateTo("sign-up"))">Sign Up</button>
+</CentredBoxWithTitle>

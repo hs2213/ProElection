@@ -1,0 +1,30 @@
+﻿label {
+    width: 15rem;
+    gap: 1rem;
+}
+
+.label-name{
+    margin-right: auto;
+    font-weight: bold;
+}
+
+.label-input {
+    margin-left: auto;
+}
+
+.space-to-vacate {
+    max-width: 60%;
+    flex-basis: 60%;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    font-weight: bold;
+    color: red;
+    font-size: .7rem;
+}
