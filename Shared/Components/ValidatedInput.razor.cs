@@ -1,32 +1,86 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Components;
 using ProElection.Entities.Enums;
 using ProElection.Entities.Validations;
 
 namespace ProElection.Shared.Components;
 
-public partial class ValidatedInput<TEntity> where TEntity : class 
+public partial class ValidatedInput<TEntity> : IDisposable where TEntity : class
 {
     /// <summary>
-    /// Specifies the name of the label being entered to the user.
+    /// Dependency Injects validator for given class
+    /// </summary>
+    [Inject] 
+    public IValidator<TEntity> _validator { get; set; } = default!;
+    
+    /// <summary>
+    /// Specifies the name of the label to the user.
     /// </summary>
     [Parameter] 
     public string LabelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Name of the property of the class to validate
+    /// </summary>
+    [Parameter] 
+    public string PropertyName { get; set; } = string.Empty;
     
     /// <summary>
     /// Specifies the type of input to be used by the HTML input tag.
     /// </summary>
     [Parameter]
     public InputType InputType { get; set; }
-    
+
     /// <summary>
     /// Used to attach the validation to the context by assigning its events to this validation.
     /// </summary>
     [Parameter]
-    public ValidationContext ValidationContext { get; set; }
-    
+    public ValidationContext ValidationContext { get; set; } = default!;
+
     /// <summary>
-    /// Specifies the class being 
+    /// Specifies the class being validated. 
     /// </summary>
     [Parameter]
-    public TEntity Entity { get; set; }
+    public TEntity Entity { get; set; } = default!;
+
+    /// <summary>
+    /// Error message to display to user
+    /// </summary>
+    private string _error = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        ValidationContext.ValidateEvent += Validate;
+        ValidationContext.ResetEvent += Reset;
+    }
+
+    /// <summary>
+    /// Validates the property of the class given
+    /// </summary>
+    private void Validate()
+    {
+        // Gets error from the first validation error for the property
+        _error = _validator.Validate(Entity, options =>
+            options.IncludeProperties([PropertyName]))
+                .Errors.FirstOrDefault()?.ErrorMessage
+                ?? string.Empty;
+        
+        if (string.IsNullOrWhiteSpace(_error) == false)
+        {
+            ValidationContext.State = ValidationState.Invalid;
+        }
+    }
+
+    /// <summary>
+    /// Sets error message to empty
+    /// </summary>
+    private void Reset() => _error = string.Empty;
+    
+    public void Dispose()
+    {
+        ValidationContext.ValidateEvent -= Validate;
+        ValidationContext.ResetEvent -= Reset;
+    }
 }
