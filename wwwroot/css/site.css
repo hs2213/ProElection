@@ -1,9 +1,10 @@
 body {
-    background-color: #f0f0f0;
+    background-color: #121212;
+    overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, p, span, a, li, ol, table, div, button, input {
-    color: #121212;
+    color: #89cff0;
     box-sizing: border-box;
     font-family: "DM Sans", sans-serif;
     font-optical-sizing: auto;
@@ -11,62 +12,19 @@ h1, h2, h3, h4, h5, p, span, a, li, ol, table, div, button, input {
     margin: 0;
 }
 
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-button {
-    background-color: #f0f0f0;
-    border: 3px solid black;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 1.1rem;
-}
-
-button:hover {
-    background-color: #121212;
-    color: #f0f0f0;
-}
-
 div, h1, h2, h3, h4, h5, p, span, a, li, ol {
     outline: none;
     border: none;
 }
 
-.box-border {
-    border: 4px solid black;
-}
-
 h1 {
-    font-size: 5rem;
-}
-
-.inline {
-    display: flex;
-    flex-direction: row;
-}
-
-.absolute-center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 3rem;
 }
 
 .middle-container {
     width: fit-content;
     top: 50vh;
     padding: 1rem;
-}
-
-.stack-align-items {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    gap: 1rem;
 }
 
 #blazor-error-ui {
@@ -94,6 +52,19 @@ h1 {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
+
+.blue-text {
+    color: #89cff0;
+}
+
+input[type="button"] {
+    background-color: transparent;
+    font-size: 1rem;
+}
+
+label, input {
+    font-size: 1rem;
+}

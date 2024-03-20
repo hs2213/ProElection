@@ -1,5 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using ProElection.Entities;
 using ProElection.Repositories.Interfaces;
 using ProElection.Services.Interfaces;
@@ -12,12 +14,16 @@ public sealed class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IElectionService _electionService;
 
+    private readonly IValidator<User> _userValidator;
+
     public UserService(
         IUserRepository userRepository,
-        IElectionService electionService)
+        IElectionService electionService, 
+        IValidator<User> userValidator)
     {
         _userRepository = userRepository;
         _electionService = electionService;
+        _userValidator = userValidator;
     }
     
     /// <inheritdoc/>
@@ -54,6 +60,8 @@ public sealed class UserService : IUserService
         {
             return null;
         }
+
+        await _userValidator.ValidateAndThrowAsync(user);
         
         return await _userRepository.CreateUser(user);
     }

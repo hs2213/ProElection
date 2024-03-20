@@ -12,12 +12,6 @@ public partial class ValidatedInput<TEntity> : IDisposable where TEntity : class
     /// </summary>
     [Inject] 
     public IValidator<TEntity> _validator { get; set; } = default!;
-    
-    /// <summary>
-    /// Specifies the name of the label to the user.
-    /// </summary>
-    [Parameter] 
-    public string LabelName { get; set; } = string.Empty;
 
     /// <summary>
     /// Name of the property of the class to validate
@@ -26,10 +20,10 @@ public partial class ValidatedInput<TEntity> : IDisposable where TEntity : class
     public string PropertyName { get; set; } = string.Empty;
     
     /// <summary>
-    /// Specifies the type of input to be used by the HTML input tag.
+    /// Allows rendering of input inside of the validation tag.
     /// </summary>
     [Parameter]
-    public InputType InputType { get; set; }
+    public RenderFragment ChildContent { get; set; }
 
     /// <summary>
     /// Used to attach the validation to the context by assigning its events to this validation.

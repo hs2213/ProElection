@@ -1,4 +1,5 @@
-﻿using ProElection.Entities;
+﻿using FluentValidation;
+using ProElection.Entities;
 using ProElection.Repositories.Interfaces;
 using ProElection.Services.Interfaces;
 
@@ -10,17 +11,30 @@ public sealed class ElectionService : IElectionService
     private readonly IElectionCodeRepository _electionCodeRepository;
     private readonly IVoteRepository _voteRepository;
     private readonly IUserRepository _userRepository;
+    
+    private readonly IValidator<ElectionCode> _electionCodeValidator;
+    private readonly IValidator<Election> _electionValidator;
+    private readonly IValidator<Vote> _voteValidator;
+    private readonly IValidator<User> _userValidator;
 
     public ElectionService(
         IElectionRepository electionRepository, 
         IElectionCodeRepository electionCodeRepository, 
         IVoteRepository voteRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository, 
+        IValidator<ElectionCode> electionCodeValidator, 
+        IValidator<Election> electionValidator,
+        IValidator<Vote> voteValidator,
+        IValidator<User> userValidator)
     {
         _electionRepository = electionRepository;
         _electionCodeRepository = electionCodeRepository;
         _voteRepository = voteRepository;
         _userRepository = userRepository;
+        _electionCodeValidator = electionCodeValidator;
+        _electionValidator = electionValidator;
+        _voteValidator = voteValidator;
+        _userValidator = userValidator;
     }
     
     /// <inheritdoc/>
@@ -57,12 +71,19 @@ public sealed class ElectionService : IElectionService
             UserId = userId,
             Id = Guid.NewGuid()
         };
+
+        await _electionCodeValidator.ValidateAndThrowAsync(electionCode);
         
         return await _electionCodeRepository.Create(electionCode);
     }
 
     /// <inheritdoc/>
-    public async Task Vote(Vote vote) => await _voteRepository.Create(vote);
+    public async Task Vote(Vote vote)
+    {
+        await _voteValidator.ValidateAsync(vote);
+        
+        await _voteRepository.Create(vote);
+    } 
     
     /// <inheritdoc/>
     public async Task<bool> CheckIfUserVoted(Guid electionId, Guid userId) =>
