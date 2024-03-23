@@ -36,8 +36,12 @@ public partial class Notify
         _message = message;
         _showMessage = true;
 
-        await Task.Delay(2000);
+        StateHasChanged();
+        
+        await Task.Delay(1500);
 
-        _showMessage = true;
+        _showMessage = false;
+        
+        StateHasChanged();
     }
 }

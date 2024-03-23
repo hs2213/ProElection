@@ -1,0 +1,17 @@
+﻿<div>
+    <div>
+        <h3>@Election.Name</h3>
+        @if (Election.End < DateTime.Now)
+        {
+            <input type="button" value="See Results"/>
+        }
+    </div>
+    
+    @if (IsAdmin)
+    {
+        <div>
+            <input type="button" value="Add Candidate"/>
+            <input type="button" value="Add User"/>
+        </div>
+    }
+</div>

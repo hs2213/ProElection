@@ -1,6 +1,6 @@
 ﻿.page-container {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     display: flex;
 }
 
@@ -37,4 +37,14 @@ label {
 
 .blue-half > .middle-form {
     border: 3px solid #121212;
+}
+
+.black-submit {
+    border-color: #121212; 
+    color: #121212;
+}
+
+.black-submit:hover {
+    background-color: #121212;
+    color: #89cff0;
 }
