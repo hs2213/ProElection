@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using ProElection.Entities;
+using ProElection.Entities.Enums;
 using ProElection.Repositories.Interfaces;
 using ProElection.Services.Interfaces;
 
@@ -11,6 +12,8 @@ public sealed class ElectionService : IElectionService
     private readonly IElectionCodeRepository _electionCodeRepository;
     private readonly IVoteRepository _voteRepository;
     private readonly IUserRepository _userRepository;
+    
+    private readonly INotifyService _notifyService;
     
     private readonly IValidator<ElectionCode> _electionCodeValidator;
     private readonly IValidator<Election> _electionValidator;
@@ -25,7 +28,8 @@ public sealed class ElectionService : IElectionService
         IValidator<ElectionCode> electionCodeValidator, 
         IValidator<Election> electionValidator,
         IValidator<Vote> voteValidator,
-        IValidator<User> userValidator)
+        IValidator<User> userValidator, 
+        INotifyService notifyService)
     {
         _electionRepository = electionRepository;
         _electionCodeRepository = electionCodeRepository;
@@ -35,6 +39,7 @@ public sealed class ElectionService : IElectionService
         _electionValidator = electionValidator;
         _voteValidator = voteValidator;
         _userValidator = userValidator;
+        _notifyService = notifyService;
     }
     
     /// <inheritdoc/>
@@ -52,7 +57,19 @@ public sealed class ElectionService : IElectionService
     /// <inheritdoc/>
     public async Task<ElectionCode?> GetElectionCode(Guid electionCodeId)
     {
-        return await _electionCodeRepository.GetById(electionCodeId);
+        ElectionCode? electionCode = await _electionCodeRepository.GetById(electionCodeId);
+
+        if (electionCode == null)
+        {
+            await _notifyService.ShowNotification("Failed to get election from code. Please try again");
+        }
+
+        if (electionCode!.Status == CodeStatus.Used)
+        {
+            await _notifyService.ShowNotification("Code has already been used.");
+        }
+
+        return electionCode;
     }
     
     /// <inheritdoc/>
@@ -80,9 +97,11 @@ public sealed class ElectionService : IElectionService
     /// <inheritdoc/>
     public async Task Vote(Vote vote)
     {
-        await _voteValidator.ValidateAsync(vote);
+        await _voteValidator.ValidateAndThrowAsync(vote);
         
         await _voteRepository.Create(vote);
+
+        await _notifyService.ShowNotification("Vote Sent");
     } 
     
     /// <inheritdoc/>

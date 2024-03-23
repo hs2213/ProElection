@@ -9,7 +9,7 @@ public static class GetEmptyEntity
     {
         return new User
         {
-            Id = Guid.Empty,
+            Id = Guid.NewGuid(),
             Address = string.Empty,
             Country = string.Empty,
             Email = string.Empty,

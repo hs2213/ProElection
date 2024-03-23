@@ -25,6 +25,8 @@ builder.Services
     .AddScoped<IElectionService, ElectionService>()
     .AddScoped<IUserService, UserService>();
 
+builder.Services.AddSingleton<INotifyService, NotifyService>();
+
 builder.Services.AddScoped<IValidator<Election>, ElectionValidator>();
 builder.Services.AddScoped<IValidator<ElectionCode>, ElectionCodeValidator>();
 builder.Services.AddScoped<IValidator<User>, UserValidator>();

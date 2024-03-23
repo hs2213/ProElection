@@ -20,12 +20,14 @@ public partial class Index
 
     private bool _signUpEnabled = false;
 
-    private ValidationContext _userContext = new ValidationContext();
+    private readonly ValidationContext _userContext = new ValidationContext();
 
-    private User _user = GetEmptyEntity.User();
+    private readonly User _user = GetEmptyEntity.User();
 
     private async Task AttemptSignIn()
     {
+        _user.UserType = UserType.Voter;
+        
         if (ValidateUser() == ValidationState.Invalid)
         {
             return;
@@ -39,9 +41,7 @@ public partial class Index
             return;
         }
 
-        await _protectedSessionStorage.SetAsync("userId", retrievedUser.Id);
-        
-        _navigationManager.NavigateTo("/elections");
+        await SetUserAndNavigate(retrievedUser);
     }
     
     private ValidationState ValidateUser()
@@ -52,4 +52,31 @@ public partial class Index
         return _userContext.State;
     }
 
+    private async Task CreateUser(User userToCreate)
+    {
+        userToCreate.UserType = UserType.Voter;
+
+        User? createdUser = await _userService.CreateUser(userToCreate);
+
+        // if user could not be created
+        if (createdUser == null )
+        {
+            return;
+        }
+
+        await SetUserAndNavigate(createdUser);
+    }
+
+    private async Task SetUserAndNavigate(User user)
+    {
+        await _protectedSessionStorage.SetAsync("userId", user.Id);
+
+        if (user.UserType == UserType.Admin)
+        {
+            _navigationManager.NavigateTo("/admin");
+            return;
+        }
+        
+        _navigationManager.NavigateTo("/elections");
+    }
 }

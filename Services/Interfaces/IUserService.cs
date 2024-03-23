@@ -48,15 +48,7 @@ public interface IUserService
     /// Adds an election to a <see cref="User"/>.
     /// </summary>
     /// <param name="user">user to add the election to.</param>
-    /// <param name="electionId">Id of the election to add.</param>
+    /// <param name="election">Election to add</param>
     /// <returns></returns>
-    public Task AddElectionToUser(User user, Guid electionId);
-
-    /// <summary>
-    /// Removes an election from a <see cref="User"/>.
-    /// </summary>
-    /// <param name="user">user to remove the election from.</param>
-    /// <param name="electionId">Id of the election to remove.</param>
-    /// <returns></returns>
-    public Task RemoveElectionFromUser(User user, Guid electionId);
+    public Task AddElectionToUser(User user, Election election);
 }

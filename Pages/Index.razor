@@ -9,7 +9,6 @@
             @if (_signUpEnabled == false)
             { 
                 <form class="middle-form" @onsubmit="AttemptSignIn">
-                    
                     <h2 class="blue-text">Sign In</h2>
 
                     <ValidatedInput
@@ -25,22 +24,27 @@
                     <ValidatedInput
                         TEntity="User"
                         Entity="_user"
-                        PropertyName="@nameof(User.Email)"
+                        PropertyName="@nameof(User.HashedPassword)"
                         ValidationContext="_userContext">
                         <label>
-                            Password: <input type="text" @bind="_user.HashedPassword"/>
+                            Password: <input type="password" @bind="_user.HashedPassword"/>
                         </label>
                     </ValidatedInput>
 
                     <label class="blue-text">
                         <input type="submit" value="Sign In"/>
                     </label>
+                    
+                    <p class="blue-text pointer" @onclick="() => _signUpEnabled = true">Dont have an account?</p>
                 </form>
-                
             }
             else
             {
-                
+                <AddUser
+                    Label="Sign Up"
+                    Class="middle-form"
+                    OnUserCreated="CreateUser"
+                    />
             }
                 
     </div>

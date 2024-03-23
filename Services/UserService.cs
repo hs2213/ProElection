@@ -13,21 +13,34 @@ public sealed class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IElectionService _electionService;
+    private readonly INotifyService _notifyService;
 
     private readonly IValidator<User> _userValidator;
 
     public UserService(
         IUserRepository userRepository,
         IElectionService electionService, 
-        IValidator<User> userValidator)
+        IValidator<User> userValidator, 
+        INotifyService notifyService)
     {
         _userRepository = userRepository;
         _electionService = electionService;
         _userValidator = userValidator;
+        _notifyService = notifyService;
     }
-    
+
     /// <inheritdoc/>
-    public async Task<User?> GetUserById(Guid id) => await _userRepository.GetUserById(id);
+    public async Task<User?> GetUserById(Guid id)
+    {
+        User? user = await _userRepository.GetUserById(id);
+
+        if (user == null)
+        {
+            await _notifyService.ShowNotification("Failed to get user.");
+        }
+
+        return user;
+    } 
 
     /// <inheritdoc/>
     public async Task<IEnumerable<User>> GetCandidates() => await _userRepository.GetCandidates();
@@ -41,12 +54,21 @@ public sealed class UserService : IUserService
         
         if (user == null)
         {
+            await _notifyService.ShowNotification("No account associated with that email");
             return null;
         }
         
         string hashedPassword = GetHashedPassword(password, user.PasswordSalt);
 
-        return hashedPassword != user.HashedPassword ? null : user;
+        if (hashedPassword != user.HashedPassword)
+        {
+            await _notifyService.ShowNotification("Password is incorrect.");
+            return null;
+        }
+
+        await _notifyService.ShowNotification("Successfully Authenticated");
+
+        return user;
     }
     
     /// <inheritdoc/>
@@ -60,10 +82,12 @@ public sealed class UserService : IUserService
         {
             return null;
         }
-
-        await _userValidator.ValidateAndThrowAsync(user);
         
-        return await _userRepository.CreateUser(user);
+        User returnedUser = await _userRepository.CreateUser(user);
+
+        await _notifyService.ShowNotification("Successfully Created User");
+
+        return returnedUser;
     }
 
     /// <inheritdoc/>
@@ -80,40 +104,21 @@ public sealed class UserService : IUserService
     }
     
     /// <inheritdoc/>
-    public async Task AddElectionToUser(User user, Guid electionId)
+    public async Task AddElectionToUser(User user, Election election)
     {
-        if (user.ParticipatingElections.Contains(electionId))
+        if (user.ParticipatingElections.Contains(election.Id))
         {
+            await _notifyService.ShowNotification("User is already a part of the election");
             return;
         }
         
-        user.ParticipatingElections.Add(electionId);
+        user.ParticipatingElections.Add(election.Id);
         await _userRepository.UpdateUser(user);
     }
-    
-    /// <inheritdoc/>
-    public async Task RemoveElectionFromUser(User user, Guid electionId)
+
+    public async Task GetAllUsersForElection(Election election)
     {
-        if (user.ParticipatingElections.Contains(electionId) == false)
-        {
-            return;
-        }
         
-        user.ParticipatingElections.Remove(electionId);
-        await _userRepository.UpdateUser(user);
-    }
-    
-    public async Task RemoveElectionFromUser(Guid userId, Guid electionId)
-    {
-        User? user = await GetUserById(userId);
-        
-        if (user == null)
-        {
-            return;
-        }
-        
-        user.ParticipatingElections.Add(electionId);
-        await _userRepository.UpdateUser(user);
     }
     
     /// <summary>
