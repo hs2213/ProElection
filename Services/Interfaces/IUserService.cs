@@ -51,4 +51,14 @@ public interface IUserService
     /// <param name="election">Election to add</param>
     /// <returns></returns>
     public Task AddElectionToUser(User user, Election election);
+
+    /// <summary>
+    /// Gets all the users that are not already part of the given election,
+    /// where their email contains the search query filtering by the <see cref="UserType"/>.
+    /// </summary>
+    /// <param name="searchQuery">email query to search for</param>
+    /// <param name="userType"><see cref="UserType"/> of user being searched for</param>
+    /// <param name="electionId">Id of the election to filter out users that arent already a part of</param>
+    /// <returns>A list of users that can be added to an election</returns>
+    public Task<IEnumerable<User>> GetUsersByEmailSearch(string searchQuery, UserType userType, Guid electionId);
 }

@@ -9,7 +9,7 @@ public class CheckAuthentication : ComponentBase
     private ProtectedSessionStorage _protectedSessionStorage { get; set; }
     
     [Inject]
-    private NavigationManager _navigationManager { get; set; }
+    protected NavigationManager _navigationManager { get; set; }
     
     protected Guid UserId { get; set; }
 

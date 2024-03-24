@@ -3,6 +3,7 @@ using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using ProElection.Entities;
+using ProElection.Entities.Enums;
 using ProElection.Repositories.Interfaces;
 using ProElection.Services.Interfaces;
 
@@ -116,9 +117,10 @@ public sealed class UserService : IUserService
         await _userRepository.UpdateUser(user);
     }
 
-    public async Task GetAllUsersForElection(Election election)
+    /// <inheritdoc/>
+    public async Task<IEnumerable<User>> GetUsersByEmailSearch(string searchQuery, UserType userType, Guid electionId)
     {
-        
+        return await _userRepository.GetUserBySearchForElection(searchQuery, userType, electionId);
     }
     
     /// <summary>

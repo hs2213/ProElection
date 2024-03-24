@@ -55,4 +55,23 @@ public class UserRepository : IUserRepository
         _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
     }
+    
+    /// <inheritdoc/>
+    public async Task<IEnumerable<User>> GetCandidatesOfAnElection(Guid electionId)
+    {
+        return await _dbContext.Users
+            .Where(user => user.UserType == UserType.Candidate)
+            .Where(candidate => candidate.ParticipatingElections.Contains(electionId))
+            .ToListAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<User>> GetUserBySearchForElection(string searchQuery, UserType userType, Guid electionId)
+    {
+        return await _dbContext.Users
+            .Where(user => user.UserType == userType)
+            .Where(user => user.ParticipatingElections.Contains(electionId) == false)
+            .Where(user => user.Email.Contains(searchQuery))
+            .ToListAsync();
+    }
 }

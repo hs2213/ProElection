@@ -1,9 +1,107 @@
-﻿@inherits ProElection.Shared.ComponentBases.CheckAuthentication
+﻿@using ProElection.Entities
+@inherits ProElection.Shared.ComponentBases.CheckAuthentication
 @page "/admin"
 
 <h1 class="app-title">Admin</h1>
 
 <div>
-    <input type="button" value="Add Election"/>
-    <input type="button" value="Add Candidate"/>
+    <input 
+        type="button" 
+        value="Add Election" 
+        @onclick="() => _electionModificationType = ElectionModificationType.AddElection"/>
+    <input 
+        type="button" 
+        value="Add Candidate"
+        @onclick="() => _electionModificationType = ElectionModificationType.AddUser"/>
 </div>
+
+<div>
+    <div>
+        @foreach(Election election in _elections)
+        {
+            <SingleElection
+                Election="@election"
+                ViewingUser="_adminUser"
+                OnAddUserToElection="OnAddUserToElectionClicked"/>
+        }
+    </div>
+    <div>
+        @switch (_electionModificationType)
+        {
+            case ElectionModificationType.Default:
+                break;
+                
+            case ElectionModificationType.AddUser:
+                <AddUser
+                    Label="Create Candidate"
+                    UserType="UserType.Candidate"
+                    Class=""
+                    OnUserCreated="CreateCandidate"/>
+                break;
+                
+            case ElectionModificationType.AddUserToElection:
+                <div>
+                    <form @onsubmit="SearchUsers">
+                        <label>
+                            <input type="text" @bind="_searchQuery"/>
+                        </label>
+                        <label>
+                            <input type="submit" value="Search"/>
+                        </label>
+                    </form>
+                    <div>
+                        @foreach (User user in _foundUsers)
+                        {
+                            <p @onclick="() => _selectedUser = user">
+                                @user.Email - @user.Name - @user.Id
+                            </p>
+                            <hr/>
+                        }
+                        <input type="button" value="Add" @onclick="AddUserToElection"/>
+                    </div>
+                </div>
+                break;
+                
+            case ElectionModificationType.AddElection:
+                <form @onsubmit="CreateElection">
+                    <h2 class="blue-text">Create Election</h2>
+    
+                    <ValidatedInput
+                        TEntity="Election"
+                        Entity="_electionToAdd"
+                        PropertyName="@nameof(Election.Name)"
+                        ValidationContext="_electionValidationContext">
+                        <label>
+                            Name: <input type="text" @bind="_electionToAdd.Name"/>
+                        </label>
+                    </ValidatedInput>
+                    
+                    <ValidatedInput
+                        TEntity="Election"
+                        Entity="_electionToAdd"
+                        PropertyName="@nameof(Election.Start)"
+                        ValidationContext="_electionValidationContext">
+                        <label>
+                            Start: <input type="datetime-local" @bind="_electionToAdd.Start"/>
+                        </label>
+                    </ValidatedInput>
+                    
+                    <ValidatedInput
+                        TEntity="Election"
+                        Entity="_electionToAdd"
+                        PropertyName="@nameof(Election.End)"
+                        ValidationContext="_electionValidationContext">
+                        <label>
+                            End: <input type="datetime-local" @bind="_electionToAdd.End"/>
+                        </label>
+                    </ValidatedInput>
+                    
+                    <input type="submit"/>
+                </form>
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    </div>
+</div>
+

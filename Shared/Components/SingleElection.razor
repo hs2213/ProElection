@@ -1,17 +1,21 @@
-﻿<div>
-    <div>
+﻿<div 
+    @ondblclick="@NavigateToVotePage" 
+    class="election-container
+           @(Election.End < DateTime.Now ? "completed-election" : "")">
+    
+    <div class="sub-container">
         <h3>@Election.Name</h3>
         @if (Election.End < DateTime.Now)
         {
-            <input type="button" value="See Results"/>
+            <input type="button" value="See Results" @onclick="NavigateToVotePage"/>
         }
     </div>
     
-    @if (IsAdmin)
+    @if (ViewingUser.UserType == UserType.Admin)
     {
-        <div>
-            <input type="button" value="Add Candidate"/>
-            <input type="button" value="Add User"/>
+        <div class="sub-container right">
+            <input type="button" value="Add Candidate" @onclick="() => AddUserToElection(UserType.Candidate)"/>
+            <input type="button" value="Add User" @onclick="() => AddUserToElection(UserType.Voter)"/>
         </div>
     }
 </div>

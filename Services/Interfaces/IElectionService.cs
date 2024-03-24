@@ -4,6 +4,14 @@ namespace ProElection.Services.Interfaces;
 
 public interface IElectionService
 {
+
+    /// <summary>
+    /// Creates a new election.
+    /// </summary>
+    /// <param name="election"><see cref="Election"/> to add.</param>
+    /// <returns></returns>
+    public Task<Election> CreateElection(Election election);
+    
     /// <summary>
     /// Retrieves elections with the given IDs.
     /// </summary>

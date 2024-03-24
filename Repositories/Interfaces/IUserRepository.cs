@@ -47,4 +47,21 @@ public interface IUserRepository
     /// <param name="user"><see cref="User"/> to update.</param>
     /// <returns></returns>
     public Task UpdateUser(User user);
+
+    /// <summary>
+    /// Gets all the candidates of an election.
+    /// </summary>
+    /// <param name="electionId">Id of election to get candidates of</param>
+    /// <returns><see cref="IEnumerable{User}"/> containing the candidates of the election.</returns>
+    public Task<IEnumerable<User>> GetCandidatesOfAnElection(Guid electionId);
+
+    /// <summary>
+    /// Gets all the users that are not already part of the given election,
+    /// where their email contains the search query filtering by the <see cref="UserType"/>.
+    /// </summary>
+    /// <param name="searchQuery">email query to search for</param>
+    /// <param name="userType"><see cref="UserType"/> of user being searched for</param>
+    /// <param name="electionId">Id of the election to filter out users that arent already a part of</param>
+    /// <returns>A list of users that can be added to an election</returns>
+    public Task<IEnumerable<User>> GetUserBySearchForElection(string searchQuery, UserType userType, Guid electionId);
 }

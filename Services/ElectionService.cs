@@ -43,6 +43,15 @@ public sealed class ElectionService : IElectionService
     }
     
     /// <inheritdoc/>
+    public async Task<Election> CreateElection(Election election)
+    {
+        await _electionValidator.ValidateAndThrowAsync(election);
+        Election electionCreated = await _electionRepository.CreateElection(election);
+        await _notifyService.ShowNotification("Election Created");
+        return electionCreated;
+    }
+    
+    /// <inheritdoc/>
     public async Task<IEnumerable<Election>> GetAllElections()
     {
         return await _electionRepository.GetElections();
@@ -139,16 +148,11 @@ public sealed class ElectionService : IElectionService
     {
         Dictionary<User, int> candidatesWithVoteCount = new Dictionary<User, int>();
         
-        foreach (Guid candidateId in election.Candidates)
+        IEnumerable<User> candidates = await _userRepository.GetCandidatesOfAnElection(election.Id);
+        
+        foreach (User candidate in candidates)
         {
-            User? candidate = await _userRepository.GetUserById(candidateId);
-
-            if (candidate == null)
-            {
-                continue;
-            }
-
-            int noOfVotes = await _voteRepository.GetCandidateVotesByElectionId(candidateId, election.Id);
+            int noOfVotes = await _voteRepository.GetCandidateVotesByElectionId(candidate.Id, election.Id);
             
             candidatesWithVoteCount.Add(candidate, noOfVotes);
         }

@@ -19,8 +19,5 @@ public class ElectionValidator : AbstractValidator<Election>
         RuleFor(election => election.End)
             .NotEmpty().WithMessage("Please provide an End Date")
             .GreaterThan(election => election.Start).WithMessage("End Date must be after Start Date");
-
-        RuleFor(election => election.Candidates)
-            .NotNull().WithMessage("Candidate list cannot be null");
     }
 }

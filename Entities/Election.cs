@@ -28,10 +28,5 @@ public class Election
     /// </summary>
     public DateTime End { get; set; }
     
-    /// <summary>
-    /// List of candidate ID's associated with the election
-    /// </summary>
-    public required List<Guid> Candidates { get; set; }
-    
     public ElectionType ElectionType { get; set; }
 }

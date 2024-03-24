@@ -1,3 +1,7 @@
+div {
+    transition: 0.3s;
+}
+
 body {
     background-color: #121212;
     overflow: hidden;
@@ -60,7 +64,7 @@ h1 {
     color: #89cff0;
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="button"] {
     background-color: transparent;
     border: 2px solid #89cff0;
     font-size: 1rem;
@@ -68,7 +72,7 @@ input[type="submit"] {
     transition: 0.3s;
 }
 
-input[type="submit"]:hover {
+input[type="submit"]:hover, input[type="button"]:hover {
     background-color: #89cff0;
     color: #121212;
 }

@@ -23,10 +23,6 @@ namespace ProElection.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Candidates")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("ElectionType")
                         .HasColumnType("INTEGER");
 

@@ -1,4 +1,6 @@
-﻿namespace ProElection.Entities;
+﻿using ProElection.Entities.Enums;
+
+namespace ProElection.Entities;
 
 /// <summary>
 /// Gets an empty version of an entity for initialisation
@@ -22,5 +24,15 @@ public static class GetEmptyEntity
         }; 
     }
     
-    
+    public static Election Election()
+    {
+        return new Election
+        {
+            Id = Guid.NewGuid(),
+            ElectionType = ElectionType.FirstPastThePost,
+            End = DateTime.Now.AddDays(1),
+            Name = string.Empty,
+            Start = DateTime.Now
+        };
+    }
 }
