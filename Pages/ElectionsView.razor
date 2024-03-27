@@ -1,6 +1,19 @@
-﻿@page "/elections"
-<h3>ElectionsView</h3>
+﻿@using ProElection.Entities
+@inherits ProElection.Shared.ComponentBases.CheckAuthentication
+@page "/elections"
+<h1>Elections</h1>
 
-@code {
-    
+@if (ViewingUser == null)
+{
+    <p>User Not Found...</p>
+}
+else
+{
+    <div class="election-list">
+        @foreach (Election election in _elections)
+        {
+            <SingleElection
+                Election="election"
+                ViewingUser="ViewingUser"/>        }
+    </div>
 }

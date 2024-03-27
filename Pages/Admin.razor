@@ -15,17 +15,17 @@
         @onclick="() => _electionModificationType = ElectionModificationType.AddUser"/>
 </div>
 
-<div>
-    <div>
+<div class="page-container">
+    <div class="elections-container">
         @foreach(Election election in _elections)
         {
             <SingleElection
                 Election="@election"
-                ViewingUser="_adminUser"
+                ViewingUser="ViewingUser"
                 OnAddUserToElection="OnAddUserToElectionClicked"/>
         }
     </div>
-    <div>
+    <div class="forms-container">
         @switch (_electionModificationType)
         {
             case ElectionModificationType.Default:
@@ -35,12 +35,12 @@
                 <AddUser
                     Label="Create Candidate"
                     UserType="UserType.Candidate"
-                    Class=""
+                    Class="base-form"
                     OnUserCreated="CreateCandidate"/>
                 break;
                 
             case ElectionModificationType.AddUserToElection:
-                <div>
+                <div class="base-form">
                     <form @onsubmit="SearchUsers">
                         <label>
                             <input type="text" @bind="_searchQuery"/>
@@ -52,10 +52,12 @@
                     <div>
                         @foreach (User user in _foundUsers)
                         {
-                            <p @onclick="() => _selectedUser = user">
+                            <p 
+                                @onclick="() => _selectedUser = user"
+                                class="user-select @(_selectedUser == user? "selected" : "")">
                                 @user.Email - @user.Name - @user.Id
                             </p>
-                            <hr/>
+                            <hr class="user-divider"/>
                         }
                         <input type="button" value="Add" @onclick="AddUserToElection"/>
                     </div>
@@ -63,7 +65,7 @@
                 break;
                 
             case ElectionModificationType.AddElection:
-                <form @onsubmit="CreateElection">
+                <form @onsubmit="CreateElection" class="base-form">
                     <h2 class="blue-text">Create Election</h2>
     
                     <ValidatedInput

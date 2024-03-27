@@ -11,6 +11,14 @@ public interface IElectionService
     /// <param name="election"><see cref="Election"/> to add.</param>
     /// <returns></returns>
     public Task<Election> CreateElection(Election election);
+
+    /// <summary>
+    /// Gets an election by its ID.
+    /// </summary>
+    /// <param name="electionId">Id of the election to get.</param>
+    /// <returns><see cref="Election"/> associated with the ID given
+    /// or null if not found.</returns>
+    public Task<Election?> GetElectionById(Guid electionId);
     
     /// <summary>
     /// Retrieves elections with the given IDs.

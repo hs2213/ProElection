@@ -81,6 +81,7 @@ public sealed class UserService : IUserService
 
         if (await _userRepository.CheckEmailExists(user.Email))
         {
+            await _notifyService.ShowNotification("Email already exists");
             return null;
         }
         
@@ -103,6 +104,12 @@ public sealed class UserService : IUserService
         
         return await _electionService.GetElectionsByMultipleIds(user.ParticipatingElections);
     }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<User>> GetCandidatesForElection(Election election)
+    {
+        return await _userRepository.GetCandidatesOfAnElection(election.Id);
+    }
     
     /// <inheritdoc/>
     public async Task AddElectionToUser(User user, Election election)
@@ -115,6 +122,8 @@ public sealed class UserService : IUserService
         
         user.ParticipatingElections.Add(election.Id);
         await _userRepository.UpdateUser(user);
+        
+        await _notifyService.ShowNotification("Successfully added election to user");
     }
 
     /// <inheritdoc/>

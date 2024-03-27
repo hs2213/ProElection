@@ -11,9 +11,6 @@ namespace ProElection.Pages;
 public partial class Admin : CheckAuthentication
 {
     [Inject]
-    private IUserService _userService { get; set; } = default!;
-    
-    [Inject]
     private IElectionService _electionService { get; set; } = default!;
     
     private ElectionModificationType _electionModificationType = ElectionModificationType.Default;
@@ -23,8 +20,6 @@ public partial class Admin : CheckAuthentication
     private readonly ValidationContext _electionValidationContext = new ValidationContext();
     
     private readonly ValidationContext _candidateValidationContext = new ValidationContext();
-    
-    private User _adminUser = GetEmptyEntity.User();
     
     private User _selectedUser = default!;
     
@@ -51,11 +46,9 @@ public partial class Admin : CheckAuthentication
 
         if (firstRender)
         {
-            _adminUser = await _userService.GetUserById(UserId) ?? throw new Exception("User not found");
-
-            if (_adminUser.UserType != UserType.Admin)
+            if (ViewingUser?.UserType != UserType.Admin)
             {
-                _navigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/");
             }
             
             StateHasChanged();
@@ -94,13 +87,13 @@ public partial class Admin : CheckAuthentication
         candidateToAdd.Id = Guid.NewGuid();
         candidateToAdd.UserType = UserType.Candidate;
         
-        await _userService.CreateUser(candidateToAdd);
+        await UserService.CreateUser(candidateToAdd);
     }
     
     private async Task SearchUsers()
     {
         _foundUsers =
-            await _userService.GetUsersByEmailSearch(_searchQuery, _userTypeToSearchFor, _selectedElection.Id) 
+            await UserService.GetUsersByEmailSearch(_searchQuery, _userTypeToSearchFor, _selectedElection.Id) 
                 as List<User> ?? [];
         
         StateHasChanged();
@@ -108,7 +101,7 @@ public partial class Admin : CheckAuthentication
     
     private async Task AddUserToElection()
     {
-        await _userService.AddElectionToUser(_selectedUser, _selectedElection);
+        await UserService.AddElectionToUser(_selectedUser, _selectedElection);
         _foundUsers.Remove(_selectedUser);
         StateHasChanged();
     }

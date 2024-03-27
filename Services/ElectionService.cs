@@ -52,6 +52,12 @@ public sealed class ElectionService : IElectionService
     }
     
     /// <inheritdoc/>
+    public async Task<Election?> GetElectionById(Guid electionId)
+    {
+        return await _electionRepository.GetElectionById(electionId);
+    }
+    
+    /// <inheritdoc/>
     public async Task<IEnumerable<Election>> GetAllElections()
     {
         return await _electionRepository.GetElections();
@@ -120,7 +126,7 @@ public sealed class ElectionService : IElectionService
     /// <inheritdoc/>
     public async Task<Dictionary<User, int>?> CalculateResults(Guid electionId)
     {
-        Election? election = await _electionRepository.GetElectionById(electionId);
+        Election? election = await GetElectionById(electionId);
 
         if (election == null)
         {

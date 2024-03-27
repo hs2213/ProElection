@@ -24,6 +24,13 @@ public interface IUserService
     public Task<User?> GetUserById(Guid id);
 
     /// <summary>
+    /// Gets a list of <see cref="User"/> that are candidates for the given election.
+    /// </summary>
+    /// <param name="election">election to get candidates of</param>
+    /// <returns>List of <see cref="User"/> with the candidate user type for the given election.</returns>
+    public Task<IEnumerable<User>> GetCandidatesForElection(Election election);
+    
+    /// <summary>
     /// Gets all the users with the type of <see cref="UserType.Candidate"/>
     /// </summary>
     /// <returns>List of <see cref="User"/> of type <see cref="UserType.Candidate"/></returns>

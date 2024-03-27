@@ -1,0 +1,8 @@
+﻿@inherits ProElection.Shared.ComponentBases.CheckAuthentication
+
+@if (UserId != null)
+{
+    <div class="logout" @onclick="LogOut">
+        <h3>Logout</h3>
+    </div>
+}
