@@ -101,7 +101,8 @@ public sealed class ElectionService : IElectionService
         {
             ElectionId = electionId,
             UserId = userId,
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            Status = CodeStatus.New
         };
 
         await _electionCodeValidator.ValidateAndThrowAsync(electionCode);
@@ -118,6 +119,16 @@ public sealed class ElectionService : IElectionService
 
         await _notifyService.ShowNotification("Vote Sent");
     } 
+    
+    /// <inheritdoc/>
+    public async Task MarkElectionCodeAsUsed(ElectionCode electionCode)
+    {
+        electionCode.Status = CodeStatus.Used;
+        
+        await _electionCodeRepository.Update(electionCode);
+
+        await _notifyService.ShowNotification("Election Code Marked as Used");
+    }
     
     /// <inheritdoc/>
     public async Task<bool> CheckIfUserVoted(Guid electionId, Guid userId) =>

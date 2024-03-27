@@ -32,6 +32,8 @@ public partial class Admin : CheckAuthentication
     private List<User> _foundUsers = [];
     
     private string _searchQuery = string.Empty;
+    
+    private bool _renderSingleElection = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,7 +52,8 @@ public partial class Admin : CheckAuthentication
             {
                 NavigationManager.NavigateTo("/");
             }
-            
+
+            _renderSingleElection = true;
             StateHasChanged();
         }
     }

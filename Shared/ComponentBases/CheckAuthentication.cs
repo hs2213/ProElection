@@ -19,6 +19,8 @@ public class CheckAuthentication : ComponentBase
     protected Guid UserId { get; set; }
     
     protected User? ViewingUser { get; set; }
+    
+    protected bool NavigateIfNotAuthenticated { get; set; } = true;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -27,7 +29,7 @@ public class CheckAuthentication : ComponentBase
             ProtectedBrowserStorageResult<Guid> userIdResult = 
                 await ProtectedSessionStorage.GetAsync<Guid>("userId");
 
-            if (userIdResult.Success == false)
+            if (userIdResult.Success == false && NavigateIfNotAuthenticated)
             {
                 NavigationManager.NavigateTo("/");
                 return;
@@ -42,13 +44,13 @@ public class CheckAuthentication : ComponentBase
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task<User?> GetUser()
+    private async Task GetUser()
     {
         if (UserId == null)
         {
-            return null;
+            return;
         }
             
-        return await UserService.GetUserById(UserId);
+        ViewingUser = await UserService.GetUserById(UserId);
     }
 }

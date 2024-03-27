@@ -17,12 +17,15 @@
 
 <div class="page-container">
     <div class="elections-container">
-        @foreach(Election election in _elections)
+        @if (_renderSingleElection)
         {
-            <SingleElection
-                Election="@election"
-                ViewingUser="ViewingUser"
-                OnAddUserToElection="OnAddUserToElectionClicked"/>
+            @foreach (Election election in _elections)
+            {
+                <SingleElection
+                    Election="@election"
+                    ViewingUser="ViewingUser"
+                    OnAddUserToElection="OnAddUserToElectionClicked"/>
+            }
         }
     </div>
     <div class="forms-container">

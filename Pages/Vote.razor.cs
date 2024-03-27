@@ -9,12 +9,17 @@ namespace ProElection.Pages;
 public partial class Vote : CheckAuthentication
 {
     [Parameter]
-    public Guid ElectionId { get; set; }
+    public Guid Id { get; set; }
+    
+    [Parameter]
+    public bool IsInPerson { get; set; }
     
     [Inject]
     private IElectionService _electionService { get; set; } = default!;
     
     private Election? _election = default!;
+
+    private ElectionCode? _electionCode;
 
     private Dictionary<User, int>? _candidatesResults;
 
@@ -23,6 +28,13 @@ public partial class Vote : CheckAuthentication
     private bool _votingDisabled = false;
     
     private bool _alreadyVoted = false;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        NavigateIfNotAuthenticated = false;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -34,14 +46,16 @@ public partial class Vote : CheckAuthentication
             {
                 _votingDisabled = true;
             }
-            
-            _election = await _electionService.GetElectionById(ElectionId);
 
-            if (_election == null)
+            if (IsInPerson)
             {
-                NavigationManager.NavigateTo("/elections");
+                await ProcessElectionCode();
             }
-
+            else
+            {
+                await ProcessElectionId();
+            }
+            
             _candidates = await UserService.GetCandidatesForElection(_election!) as List<User> ?? [];
             
             if (_election!.End < DateTime.Now)
@@ -51,25 +65,53 @@ public partial class Vote : CheckAuthentication
             }
 
             _alreadyVoted = await _electionService.CheckIfUserVoted(_election.Id, UserId);
+            
+            StateHasChanged();
+        }
+    }
+
+    private async Task ProcessElectionCode()
+    {
+        _electionCode = await _electionService.GetElectionCode(Id);
+
+        if (_electionCode == null || _electionCode.Status == CodeStatus.Used)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        
+        UserId = _electionCode!.UserId;
+        ViewingUser = await UserService.GetUserById(UserId);
+        
+        _election = await _electionService.GetElectionById(_electionCode.ElectionId);
+    }
+
+    private async Task ProcessElectionId()
+    {
+        _election = await _electionService.GetElectionById(Id);
+
+        if (_election == null)
+        {
+            NavigationManager.NavigateTo("/elections");
         }
     }
     
     private async Task GetResults()
     {
-        _candidatesResults = await _electionService.CalculateResults(ElectionId);
+        _candidatesResults = await _electionService.CalculateResults(_election!.Id);
     }
     
     private async Task PlaceVote(User candidate)
     {
         if (_votingDisabled)
         {
+            NavigationManager.NavigateTo("/elections");
             return;
         }
         
         Entities.Vote vote = new Entities.Vote
         {
             CandidateId = candidate.Id,
-            ElectionId = ElectionId,
+            ElectionId = _election!.Id,
             UserId = UserId,
             Id = Guid.NewGuid(),
             Time = DateTimeOffset.Now
@@ -78,5 +120,12 @@ public partial class Vote : CheckAuthentication
         await _electionService.Vote(vote);
         
         _votingDisabled = true;
+
+        if (IsInPerson)
+        {
+            await _electionService.MarkElectionCodeAsUsed(_electionCode!);
+        }
+        
+        NavigationManager.NavigateTo("/elections");
     }
 }

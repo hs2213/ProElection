@@ -55,6 +55,13 @@ public interface IElectionService
     /// <param name="vote"><see cref="Vote"/> to record</param>
     /// <returns></returns>
     public Task Vote(Vote vote);
+
+    /// <summary>
+    /// Marks an election code as used.
+    /// </summary>
+    /// <param name="electionCode"><see cref="ElectionCode"/> to mark</param>
+    /// <returns></returns>
+    public Task MarkElectionCodeAsUsed(ElectionCode electionCode);
     
     /// <summary>
     /// Checks if a user has voted or not for the given election associated with the election ID given.
